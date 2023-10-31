@@ -7,10 +7,12 @@ function App() {
   let [charAllowed, setCharAllowed] = useState(false);
   let [password, setPassword] = useState("");
   let [copy, setCopy] = useState("Copy");
+  let [isCopy, setIsCopy] = useState(false);
+  let [isModify, setIsModify] = useState(false);
+
 
   //useRef hook
   let passRef = useRef(null);
-
   let copyPassToClip = useCallback(() => {
     passRef.current?.select();
     window.navigator.clipboard.writeText(password);
@@ -18,12 +20,13 @@ function App() {
 
   let changeHtml = useCallback(() => {
     setCopy("Copied");
-  }, [password]);
+  }, [password, setPassword]);
 
   let handleBtnClick = () => {
     copyPassToClip();
     changeHtml();
   };
+
 
   const pwGenerator = useCallback(() => {
     let pass = "";
@@ -42,7 +45,7 @@ function App() {
   useEffect(() => {
     pwGenerator();
   }, [length, numberAllowed, charAllowed]);
-  
+
   return (
     <div className="w-screen h-screen bg-black flex items-center justify-center">
       <div className="w-full max-w-md mx-auto shadow-md rounded-lg px-4 py-4  bg-gray-700 ">
@@ -62,51 +65,53 @@ function App() {
             id="copy"
           >
             {copy}
-          </button>
-        </div>
-        <div className="flex text-sm gap-x-2">
-          <div className=" flex items-center gap-x-1">
-            <input
-              type="range"
-              min={8}
-              max={100}
-              value={length}
-              className="cursor-pointer"
-              onChange={(e) => {
-                setLength(e.target.value);
-              }}
-            />
-            <label className="text-orange-500"> Length:{length}</label>
+          </button>  
+
+
           </div>
-          <div className=" flex items-center gap-x-1">
-            <input
-              type="checkbox"
-              defaultChecked={numberAllowed}
-              id="numberInput"
-              onChange={() => {
-                setNumberAllowed((prev) => !prev);
-              }}
-            />
-            <label className="text-orange-500" htmlFor="numberInput">
-              Numbers
-            </label>
-          </div>
-          <div className=" flex items-center gap-x-1">
-            <input
-              type="checkbox"
-              defaultChecked={charAllowed}
-              id="CharInput"
-              onChange={() => {
-                setCharAllowed((prev) => !prev);
-              }}
-            />
-            <label className="text-orange-500" htmlFor="CharInput">
-              Characters
-            </label>
+          <div className="flex text-sm gap-x-2">
+            <div className=" flex items-center gap-x-1">
+              <input
+                type="range"
+                min={8}
+                max={100}
+                value={length}
+                className="cursor-pointer"
+                onChange={(e) => {
+                  setLength(e.target.value);
+                }}
+              />
+              <label className="text-orange-500"> Length:{length}</label>
+            </div>
+            <div className=" flex items-center gap-x-1">
+              <input
+                type="checkbox"
+                defaultChecked={numberAllowed}
+                id="numberInput"
+                onChange={() => {
+                  setNumberAllowed((prev) => !prev);
+                }}
+              />
+              <label className="text-orange-500" htmlFor="numberInput">
+                Numbers
+              </label>
+            </div>
+            <div className=" flex items-center gap-x-1">
+              <input
+                type="checkbox"
+                defaultChecked={charAllowed}
+                id="CharInput"
+                onChange={() => {
+                  setCharAllowed((prev) => !prev);
+                }}
+              />
+              <label className="text-orange-500" htmlFor="CharInput">
+                Characters
+              </label>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
